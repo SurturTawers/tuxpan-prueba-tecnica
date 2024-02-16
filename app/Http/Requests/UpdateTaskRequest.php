@@ -24,7 +24,7 @@ class UpdateTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'unique:task|max:100',
+            'title' => 'unique:tasks|max:100',
             'description' => 'max:255',
             'priority' => 'numeric|between:1,100',
             'due_at' => 'date|after:today',

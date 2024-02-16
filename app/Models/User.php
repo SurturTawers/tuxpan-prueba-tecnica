@@ -18,9 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -34,6 +34,9 @@ class User extends Authenticatable
     ];
 
     public function tasks(){
-        return $this->belongsToMany(Task::class)->using(UserTasks::class);
+        return $this->belongsToMany(Task::class,'user_tasks','user_id','task_id')
+            ->as('user_tasks')
+            ->withPivot('assigned_at')
+            ->using(UserTasks::class);
     }
 }

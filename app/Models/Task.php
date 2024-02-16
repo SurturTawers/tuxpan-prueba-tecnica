@@ -19,7 +19,10 @@ class Task extends Model
         'is_active'
     ];
 
-    public function user(){
-        return $this->belongsToMany(User::class)->using(UserTasks::class);
+    public function users(){
+        return $this->belongsToMany(User::class,'user_tasks','task_id','user_id')
+            ->as('user_tasks')
+            ->withPivot('assigned_at')
+            ->using(UserTasks::class);
     }
 }
