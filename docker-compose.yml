@@ -1,0 +1,58 @@
+version: '3'
+services:
+    tuxpan-server:
+        image: nginx:alpine
+        container_name: tuxpan_server
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - tuxpan-network
+        depends_on:
+            - tuxpan-app
+            - tuxpan-db
+
+    tuxpan-app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: php:8.1-fpm
+        container_name: tuxpan_app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        networks:
+            - tuxpan-network
+        depends_on:
+            - tuxpan-db
+
+    tuxpan-db:
+        image: mysql:8.1
+        container_name: tuxpan_db
+        hostname: tuxpan_db
+        restart: unless-stopped
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USERNAME: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - tuxpan-network
+
+
+volumes:
+    dbdata:
+        driver: local
+
+networks:
+    tuxpan-network:
+        driver: bridge
