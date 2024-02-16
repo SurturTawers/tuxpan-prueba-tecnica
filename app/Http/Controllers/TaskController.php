@@ -18,8 +18,9 @@ class TaskController extends Controller
     }
 
     function createTask(CreateTaskRequest $createTaskRequest, TaskServices $taskServices){
-        $task_data = $createTaskRequest->all();
-        $response = $taskServices->createTask($task_data);
+        $task_data = $createTaskRequest->get('task_data');
+        $assigned_users = $createTaskRequest->get('assigned_users');
+        $response = $taskServices->createTask($task_data, $assigned_users);
         if(!$response['success']) return response()->json(['success'=>$response['success'], 'error'=>$response['error']],500);
         return response()->json(['success'=>$response['success']],200);
     }

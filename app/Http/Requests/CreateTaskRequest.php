@@ -24,11 +24,8 @@ class CreateTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:tasks|max:100',
-            'description' => 'required|max:255',
-            'priority' => 'required|numeric|between:1,100',
-            'due_at' => 'required|date|after:today',
-            'assigned_users' => 'array:id',
+            "task_data" => 'required',
+            'assigned_users' => 'array',
         ];
     }
 }

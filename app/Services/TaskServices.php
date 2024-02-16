@@ -18,10 +18,11 @@ class TaskServices {
         return $tasks;
     }
 
-    function createTask($task_data){
+    function createTask($task_data, $assigned_users){
         $new_task = Task::create($task_data);
+        if(!isset($assigned_users)) return ['success'=>true,'error' => ''];
         try{
-            $new_task->users()->syncWithPivotValues([1], ['assigned_at'=>Carbon::now()]);
+            $new_task->users()->syncWithPivotValues($assigned_users, ['assigned_at'=>Carbon::now()]);
         }catch(QueryException $e){
             return ['success'=>false,'error' => $e];
         }

@@ -25,7 +25,8 @@ class UsersSeeder extends Seeder
         ];
 
         foreach($users as $user){
-            User::create($user);
+            $new_user = User::create($user);
+            $token = $new_user->createToken('API TOKEN')->plainTextToken;
         }
     }
 }
